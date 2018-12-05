@@ -4,7 +4,8 @@
 
 * Eloquent Javascript
 ** Program Structure
-*** Looping a Triangle**** Problem statement
+*** Looping a Triangle
+**** Problem statement
 
 Write a loop that makes seven calls to console.log to output the following
 triangle:
