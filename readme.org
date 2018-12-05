@@ -89,7 +89,8 @@ Recursive solutions will have
 #+END_SRC
 
 
-*** FizzBuzz**** Problem Statement
+*** FizzBuzz
+**** Problem Statement
 
 Write a program that uses console.log to print all the numbers from 1 to 100,
 with two exceptions. For numbers divisible by 3, print "Fizz" instead of the
