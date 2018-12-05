@@ -1,0 +1,103 @@
+#+author: Amchelle Clendenin
+#+email: amchelle.clendenin@utexas.edu
+#+startup: content
+
+* Eloquent Javascript
+** Program Structure
+*** Looping a Triangle
+**** Problem statement
+
+Write a loop that makes seven calls to console.log to output the following
+triangle:
+
+#+BEGIN_SRC fundamental
+  #
+  ##
+  ###
+  ####
+  #####
+  ######
+  #######
+#+END_SRC
+
+**** Iterative solution
+
+First solution
+
+#+BEGIN_SRC javascript :tangle triangle-looping.js
+  for (let x = '#'; x.length < 8; x += '#') {
+      console.log(x)
+  }
+#+END_SRC
+
+| Downside                              | Solution             |
+|---------------------------------------+----------------------|
+| string.length can be a slow operation | use numeric iterator |
+
+#+BEGIN_SRC javascript :tangle triangle-looping-integer-iterator.js
+  let str = '#'
+  for (let i = 0; i < 8; i++) {
+      console.log(str)
+      str += '#'
+  }
+#+END_SRC
+
+**** Recursive solution
+
+Advantages:
+  - no state
+  - no side effects
+
+#+BEGIN_VERSE
+  re·cur·sive (/adj/)
+     - relating to a routine whose interpretation requires its own application
+#+END_VERSE
+
+Recursive solutions will have
+  1. a base-case
+  2. unit of work
+  3. recursive call with changed value
+
+#+BEGIN_SRC javascript :tangle triangle-recursive.js
+  function triangle(len) {
+      // 1. define base case
+      if (len > 7) { return }
+
+      // 2. do work
+      console.log('#'.repeat(len))
+
+      // 3. recurse
+      triangle(len + 1)
+  }
+
+  triangle(1)
+#+END_SRC
+
+| Downside                                               | Solution |
+|--------------------------------------------------------+----------|
+| can only generate triangles (or frustrums) of length 8 |          |
+
+#+BEGIN_SRC javascript :tangle triangle-recursive-general.js
+  // TODO: define parameters in triangle
+  // TODO: define base-case
+  // TODO: do unit of work
+  // TODO: call yo-self with a changed value
+
+
+
+  // Print a triangle of arbitrary length
+  function triangle(len, layer = 1) {
+
+      console.log('#'.repeat(layer))
+      if (layer > len) { return }
+      triangle(len, layer + 1)
+  }
+
+  triangle(5)
+#+END_SRC
+
+
+* File variables
+# Local Variables:
+# eval: (add-hook 'after-save-hook 'org-babel-tangle t t)
+# End:
