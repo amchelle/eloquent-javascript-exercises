@@ -1,0 +1,22 @@
+{
+  "name": "eloquent-javascript",
+  "version": "0.0.1",
+  "description": "Implementations of exercises in Eloquent Javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amchelle/eloquent-javascript-exercises.git"
+  },
+  "author": "Amchelle Clendenin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amchelle/eloquent-javascript-exercises/issues"
+  },
+  "homepage": "https://github.com/amchelle/eloquent-javascript-exercises#readme",
+  "dependencies": {
+    "lodash": "^4.17.11"
+  }
+}
