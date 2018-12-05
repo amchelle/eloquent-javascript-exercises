@@ -90,7 +90,7 @@ Recursive solutions will have
 #+END_SRC
 
 
-* File variables
+* File variables                                                   :noexport:
 # Local Variables:
 # eval: (add-hook 'after-save-hook 'org-babel-tangle t t)
 # End:
