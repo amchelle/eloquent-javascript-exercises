@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+readonly file="${1}"
+nodemon -w "${file}" -x "node ${file} || true"
