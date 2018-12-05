@@ -73,9 +73,9 @@ Recursive solutions will have
   triangle(1)
 #+END_SRC
 
-| Downside                                               | Solution                                                                                  |
-|--------------------------------------------------------+-------------------------------------------------------------------------------------------|
-| can only generate triangles (or frustrums) of length 8 | remove hard-coded limit into the function, pass a parameter with this information instead |
+| Downside                                               | Solution                                                                                    |
+|--------------------------------------------------------+---------------------------------------------------------------------------------------------|
+| can only generate triangles (or frustrums) of length 8 | remove hard-coded limit inside the function, pass a parameter with this information instead |
 
 #+BEGIN_SRC javascript :tangle triangle-recursive-general.js
   // TODO: define parameters in triangle
