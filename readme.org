@@ -78,13 +78,6 @@ Recursive solutions will have
 | can only generate triangles (or frustrums) of length 8 | remove hard-coded limit inside the function, pass a parameter with this information instead |
 
 #+BEGIN_SRC javascript :tangle triangle-recursive-general.js
-  // TODO: define parameters in triangle
-  // TODO: define base-case
-  // TODO: do unit of work
-  // TODO: call yo-self with a changed value
-
-
-
   // Print a triangle of arbitrary length
   function triangle(len, layer = 1) {
 
