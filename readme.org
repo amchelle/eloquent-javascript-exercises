@@ -123,7 +123,7 @@ labor market value just went up.):
   }
 #+END_SRC
 **** Functional solution
-#+BEGIN_SRC javascript :tangle fizzbuzz-functional.js
+#+BEGIN_SRC typescript :tangle fizzbuzz-functional.js
   const _ = require('lodash')
 
   _.each(_.range(1, 101), fizzbuzz)
@@ -144,7 +144,273 @@ labor market value just went up.):
   }
 #+END_SRC
 
-*** Chess
+*** Chessboard
+**** Problem statement
+Write a program that creates a string that represents an 8×8 grid, using newline
+characters to separate lines. At each position of the grid there is either a space
+or a "#" character. The characters should form a chessboard.
+Passing this string to console.log should show something like this:
+#+BEGIN_SRC
+# # # #
+ # # # #
+# # # #
+ # # # #
+# # # #
+ # # # #
+# # # #
+ # # # #
+#+END_SRC
+When you have a program that generates this pattern, define a binding size
+= 8 and change the program so that it works for any size , outputting a grid
+of the given width and height.
+**** Iterative solution
+
+First solution
+
+#+BEGIN_SRC javascript :tangle chessboard-iterative.js
+
+  const size = 3
+
+  // let common = '# '.repeat(size/2.0 + 1)
+
+  // for (let i = 0; i < size; ++i) {
+  //     let output = (i % 2  ? " " : "") + common
+  //     console.log(output.substring(0, size))
+  // }
+
+  for (let row = 0; row < size; ++row) {
+      let output = ''
+      for (let col = 0; col < (row % 2 ? size - 1 : size); ++col) {
+          output += col % 2 ? " " : "#"
+      }
+      console.log((row % 2 ? " " : "") + output)
+  }
+#+END_SRC
+**** Functional solution
+
+Second solution
+
+#+BEGIN_SRC javascript :tangle chessboard-functional.js
+  const _ = require('lodash')
+
+  const size = 8
+
+  _.each(_.range(0, size), print_row)
+
+  function print_row(i) {
+      const output = (i % 2 ? " " : "") + '# '.repeat(size/2.0 + 1)
+      console.log(output.substring(0, size))
+  }
+#+END_SRC
+
+** Functions
+*** Minimum
+**** Problem statement
+
+The previous chapter introduced the standard function Math.min that returns
+its smallest argument. We can build something like that now. Write a function
+min that takes two arguments and returns their minimum.
+
+**** Functional solution
+#+BEGIN_SRC javascript :tangle minimum.js
+
+  function min(num1, num2) {
+      return num1 < num2 ? num1 : num2
+  }
+
+  console.log(min(4,8))
+  console.log(min(6,12))
+  console.log(min(10,10))
+  console.log(min(7,-5))
+  console.log(min(1,0))
+  console.log(min(-1,0))
+#+END_SRC
+
+*** Recursion
+**** Problem Statement
+
+We’ve seen that % (the remainder operator) can be used to test whether a
+number is even or odd by using % 2 to see whether it’s divisible by two. Here’s
+another way to define whether a positive whole number is even or odd:
+• Zero is even.
+• One is odd.
+• For any other number N, its evenness is the same as N - 2.
+Define a recursive function isEven corresponding to this description. The
+function should accept a single parameter (a positive, whole number) and return
+a Boolean.
+Test it on 50 and 75. See how it behaves on -1. Why? Can you think of a
+way to fix this?
+
+**** Functional Solution
+#+BEGIN_SRC javascript :tangle recursion.js
+
+  function isEven(N) {
+      if (N == 0) {
+          return true
+      } else if (N == 1) {
+          return false
+      } else {
+          return isEven(Math.abs(N-2))
+      }
+  }
+  console.log(isEven(50))
+  console.log(isEven(75))
+  console.log(isEven(-1))
+
+#+END_SRC
+
+*** Bean Counting
+**** Problem Statement
+
+You can get the Nth character, or letter, from a string by writing "string"[N] .
+The returned value will be a string containing only one character (for example,
+"b" ). The first character has position 0, which causes the last one to be found at
+position string.length - 1 . In other words, a two-character string has length
+2, and its characters have positions 0 and 1.
+Write a function countBs that takes a string as its only argument and returns
+a number that indicates how many uppercase “B” characters there are in the
+string.
+Next, write a function called countChar that behaves like countBs , except
+it takes a second argument that indicates the character that is to be counted
+(rather than counting only uppercase “B” characters). Rewrite countBs to
+make use of this new function.
+
+**** Functional Solution
+#+BEGIN_SRC javascript :tangle bean-counting.js
+  const _ = require('lodash')
+
+  function countBs(string) {
+      // let res = 0
+      // _.each(string, (letter) => {
+      //     if (letter == "B") {
+      //         res += 1
+      //     }
+      // })
+      // return res
+      return countChar(string, "B")
+  }
+
+  // for (let character of "fluffypony") {
+  //     console.log('character is', character)
+  // }
+
+  console.log(countBs("BaBoon"))
+
+  // function countBs(string) {
+  //     let res = 0
+  //     let N = 0
+  //     while (N < string.length) {
+  //         if (string[N] == "B") {
+  //             res += 1
+  //         }
+  //         N += 1
+  //     }
+  //     return res
+  // }
+
+  function countChar(string, match) {
+      let res = 0
+      _.each(string, (letter) => {
+          if (letter == match) {
+              res += 1
+          }
+      })
+      return res
+  }
+#+END_SRC
+* Solving a Maze
+
+The goal is to create a maze solver, where the input is of the
+following format
+
+#+BEGIN_SRC fundamental :tangle input-maze-1.txt
+  S#####
+  .....#
+  #.####
+  #.####
+  ...#.G
+  ##...#
+#+END_SRC
+
+And
+
+| Symbol | Denotes                                   |
+|--------+-------------------------------------------|
+| '.'    | where the robot can move (open positions) |
+| '#'    | obstacles (blocked positions)             |
+| 'S'    | start position (here, x=0, y=0)           |
+| 'G'    | goal (here, x=5, y=4)                     |
+
+** Recursive solution
+#+BEGIN_SRC javascript :tangle solving-a-maze.js
+  const fs = require('fs')
+  const _ = require('lodash')
+
+  function readMaze(file) {
+      let fileContents = fs.readFileSync(file).toString('utf-8').trim()
+      let lines = fileContents.split('\n')
+      let maze = _.map(lines, (line) => line.split(''))
+      return maze
+  }
+
+  function findStart(maze) {
+      for(row = 0; row < maze.length; ++row) {
+          for(col = 0; col < maze[row].length; ++col) {
+              if (maze[row][col] === 'S') {
+                  return [row, col]
+              }
+          }
+      }
+  }
+
+  function isSearchable(maze, row, col) {
+      return maze[row][col] === '.' || maze[row][col] === 'G'
+  }
+
+  function search(maze, row, col, solved = false) {
+      if (solved) { return [maze, solved] }
+      if (maze[row][col] === 'G') {
+          console.log('I have found the golden ticket!')
+          return [maze, true]
+      }
+      if (maze[row][col] !== 'S') {
+          maze[row][col] = 'O'
+          console.log('----------', row, col, solved)
+          console.log(maze)
+      }
+      if (row < maze.length - 1 && isSearchable(maze, row + 1, col)) {
+          [dc, solved] = search(maze, row + 1, col, solved)
+      }
+      if (row > 0 && isSearchable(maze, row - 1, col)) {
+          [dc, solved] = search(maze, row - 1, col, solved)
+      }
+      if (col < maze[row].length - 1 && isSearchable(maze, row, col + 1)) {
+          [dc, solved] = search(maze, row, col + 1, solved)
+      }
+      if (col > 0 && isSearchable(maze, row, col - 1)) {
+          [dc, solved] = search(maze, row, col - 1, solved)
+      }
+     return maze
+  }
+
+  function main() {
+
+      let maze = readMaze('input-maze-1.txt')
+      console.log(maze)
+
+      let startPosition = findStart(maze)
+      let [startX, startY] = startPosition
+      console.log('Start position:', startPosition)
+
+      let path = search(maze, startX, startY)
+      console.log('I have found a solution!')
+      console.log(path)
+
+      console.log('fin')
+  }
+
+  main()
+#+END_SRC
 * File variables                                                   :noexport:
 # Local Variables:
 # eval: (add-hook 'after-save-hook 'org-babel-tangle t t)
