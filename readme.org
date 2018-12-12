@@ -332,6 +332,50 @@ following format
   ##...#
 #+END_SRC
 
+#+BEGIN_SRC fundamental :tangle input-maze-2.txt
+  ##############################################
+  S..#.................#.....#.....#........#..#
+  #..#..#############..#..#..#..#..#..####..#..#
+  #..#..#...........#.....#.....#..#.....#..#..#
+  #..#..#..######################..####..#..#..#
+  #.....#.....#.....#..............#.....#..#..#
+  ##########..#..#..####..################..#..#
+  #...........#..#........#.....#...........#..#
+  #..#######..#..##########..#..#..####..####..#
+  #........#.................#..#.....#........#
+  ####..##########..##########..####..##########
+  #.....#...........#...........#.....#........#
+  #..####..##########..##########..##########..#
+  #..#..#..#........#........#.....#........#..#
+  #..#..#..#..####..#######..####..#..#..####..#
+  #..#..#..#..#.....#.....#...........#........#
+  #..#..#..#..##########..######################
+  #.....#..#...........#..#..............#.....#
+  #######..##########..#..####..#######..#..#..#
+  #........#...........#.....#........#..#..#..#
+  #..#######..#..##########..#######..#..#..####
+  #........#..#..#........#..#.....#..#........#
+  ####..#..#..#..#..#..####..#..#..#..#######..#
+  #..#..#.....#..#..#..#.....#..#..#.....#..#..#
+  #..#..##########..#..#..####..#..####..#..#..#
+  #.....#.....#.....#..#........#.....#..#..#..#
+  #..####..#..#..####..#..#######..#..#..#..#..#
+  #.....#..#.....#.....#.....#.....#..#..#..#..#
+  ####..####..####..#######..#..####..#..#..#..#
+  #..............#...........#.....#.....#.....G
+  ##############################################
+#+END_SRC
+
+#+BEGIN_SRC fundamental :tangle input-maze-3.txt
+##############################################
+G.##.................#.....#....###......##..#
+#.##.###############.#.##.##.##.##..####.###.#
+#.##.##...........#....##....##.###....#.###.#
+#.##.##.#######################.#####.##.###.#
+#.....#.....##....#.............S#.....#.###.#
+##############################################
+#+END_SRC
+
 And
 
 | Symbol | Denotes                                   |
@@ -345,6 +389,7 @@ And
 #+BEGIN_SRC javascript :tangle solving-a-maze.js
   const fs = require('fs')
   const _ = require('lodash')
+  var stop = false
 
   function readMaze(file) {
       let fileContents = fs.readFileSync(file).toString('utf-8').trim()
@@ -363,40 +408,84 @@ And
       }
   }
 
+  function printMaze(maze) {
+      console.log('----------------------------')
+      _.each(maze, (array) => {
+          console.log(array.join(''))
+
+      })
+  }
   function isSearchable(maze, row, col) {
       return maze[row][col] === '.' || maze[row][col] === 'G'
+
   }
 
-  function search(maze, row, col, solved = false) {
-      if (solved) { return [maze, solved] }
-      if (maze[row][col] === 'G') {
-          console.log('I have found the golden ticket!')
-          return [maze, true]
-      }
-      if (maze[row][col] !== 'S') {
-          maze[row][col] = 'O'
-          console.log('----------', row, col, solved)
-          console.log(maze)
-      }
-      if (row < maze.length - 1 && isSearchable(maze, row + 1, col)) {
-          [dc, solved] = search(maze, row + 1, col, solved)
-      }
-      if (row > 0 && isSearchable(maze, row - 1, col)) {
-          [dc, solved] = search(maze, row - 1, col, solved)
-      }
-      if (col < maze[row].length - 1 && isSearchable(maze, row, col + 1)) {
-          [dc, solved] = search(maze, row, col + 1, solved)
-      }
-      if (col > 0 && isSearchable(maze, row, col - 1)) {
-          [dc, solved] = search(maze, row, col - 1, solved)
-      }
+  /* function search(maze, row, col) {
+     if (maze[row][col] === 'G') {
+     console.log('I have found the golden ticket!')
+     stop = true
+     }
+     if (maze[row][col] === '.') {
+     maze[row][col] = 'O'
+     console.log('----------', row, col)
+     printMaze(maze)
+     }
+     if (row < maze.length - 1 && isSearchable(maze, row + 1, col)) {
+     search(maze, row + 1, col)
+     stop = false
+
+     }
+     if (row > 0 && isSearchable(maze, row - 1, col)) {
+
+     search(maze, row - 1, col)
+     stop = false
+     }
+     if (col < maze[row].length - 1 && isSearchable(maze, row, col + 1)) {
+
+     search(maze, row, col + 1)
+     stop = false
+     }
+     if (col > 0 && isSearchable(maze, row, col - 1)) {
+
+     search(maze, row, col - 1)
+     stop = false
+     }
+     if (stop = true) {
      return maze
+     }
+
+
+     } */
+
+  function search(maze, row, col) {
+          if (maze[row][col] === 'G') {
+              console.log('I have found the golden ticket!')
+              return maze
+          }
+          if (maze[row][col] === '.') {
+              maze[row][col] = 'O'
+              console.log('----------', row, col)
+              printMaze(maze)
+
+          }
+      if (isSearchable(maze, row + 1, col)) {
+          return  search(maze, row + 1, col)
+      }
+      if (isSearchable(maze, row - 1, col)) {
+         return search(maze, row - 1, col)
+      }
+      if (isSearchable(maze, row, col + 1)) {
+          return search(maze, row, col + 1)
+      }
+      if (isSearchable(maze, row, col - 1)) {
+         return search(maze, row, col - 1)
+      }
   }
+
 
   function main() {
 
-      let maze = readMaze('input-maze-1.txt')
-      console.log(maze)
+      let maze = readMaze('input-maze-3.txt')
 
       let startPosition = findStart(maze)
       let [startX, startY] = startPosition
@@ -404,8 +493,8 @@ And
 
       let path = search(maze, startX, startY)
       console.log('I have found a solution!')
-      console.log(path)
-
+      // console.log(path)
+      printMaze(path)
       console.log('fin')
   }
 
