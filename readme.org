@@ -431,22 +431,26 @@ And
               finalMaze = maze
               return
           }
-          else if (maze[row][col] !== 'S') {
+          else if (maze[row][col] !== 'S' && finalMaze === undefined) {
               maze[row][col] = 'W'
           }
-          if (isSearchable(maze, row + 1, col)) {
-              depthFirstSearch(maze, row + 1, col)
+          if (finalMaze === undefined) {
+              if (isSearchable(maze, row + 1, col)) {
+                  depthFirstSearch(maze, row + 1, col)
+              }
+              if (isSearchable(maze, row - 1, col)) {
+                  depthFirstSearch(maze, row - 1, col)
+              }
+              if (isSearchable(maze, row, col + 1)) {
+                  depthFirstSearch(maze, row, col + 1)
+              }
+              if (isSearchable(maze, row, col - 1)) {
+                  depthFirstSearch(maze, row, col - 1)
+              }
+              if (finalMaze === undefined) {
+                  maze[row][col] = 'V'
+              }
           }
-          if (isSearchable(maze, row - 1, col)) {
-              depthFirstSearch(maze, row - 1, col)
-          }
-          if (isSearchable(maze, row, col + 1)) {
-              depthFirstSearch(maze, row, col + 1)
-          }
-          if (isSearchable(maze, row, col - 1)) {
-              depthFirstSearch(maze, row, col - 1)
-          }
-          maze[row][col] = 'V'
       }
       depthFirstSearch(maze, row, col)
       return finalMaze
