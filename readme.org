@@ -389,7 +389,7 @@ And
 #+BEGIN_SRC javascript :tangle solving-a-maze.js
   const fs = require('fs')
   const _ = require('lodash')
-  var stop = false
+
 
   function readMaze(file) {
       let fileContents = fs.readFileSync(file).toString('utf-8').trim()
@@ -416,72 +416,41 @@ And
       })
   }
   function isSearchable(maze, row, col) {
-      return maze[row][col] === '.' || maze[row][col] === 'G'
-
+      return (maze[row][col] === '.' || maze[row][col] === 'G') &&
+          (row >= 0 && row < maze.length &&
+           col >= 0 && col < maze[row].length)
   }
 
-  /* function search(maze, row, col) {
-     if (maze[row][col] === 'G') {
-     console.log('I have found the golden ticket!')
-     stop = true
-     }
-     if (maze[row][col] === '.') {
-     maze[row][col] = 'O'
-     console.log('----------', row, col)
-     printMaze(maze)
-     }
-     if (row < maze.length - 1 && isSearchable(maze, row + 1, col)) {
-     search(maze, row + 1, col)
-     stop = false
+  function solve(maze, row, col) {
+      let finalMaze = undefined
 
-     }
-     if (row > 0 && isSearchable(maze, row - 1, col)) {
+      function depthFirstSearch(maze, row, col) {
+          printMaze(maze)
 
-     search(maze, row - 1, col)
-     stop = false
-     }
-     if (col < maze[row].length - 1 && isSearchable(maze, row, col + 1)) {
-
-     search(maze, row, col + 1)
-     stop = false
-     }
-     if (col > 0 && isSearchable(maze, row, col - 1)) {
-
-     search(maze, row, col - 1)
-     stop = false
-     }
-     if (stop = true) {
-     return maze
-     }
-
-
-     } */
-
-  function search(maze, row, col) {
           if (maze[row][col] === 'G') {
-              console.log('I have found the golden ticket!')
-              return maze
+              finalMaze = maze
+              return
           }
-          if (maze[row][col] === '.') {
-              maze[row][col] = 'O'
-              console.log('----------', row, col)
-              printMaze(maze)
-
+          else if (maze[row][col] !== 'S') {
+              maze[row][col] = 'W'
           }
-      if (isSearchable(maze, row + 1, col)) {
-          return  search(maze, row + 1, col)
+          if (isSearchable(maze, row + 1, col)) {
+              depthFirstSearch(maze, row + 1, col)
+          }
+          if (isSearchable(maze, row - 1, col)) {
+              depthFirstSearch(maze, row - 1, col)
+          }
+          if (isSearchable(maze, row, col + 1)) {
+              depthFirstSearch(maze, row, col + 1)
+          }
+          if (isSearchable(maze, row, col - 1)) {
+              depthFirstSearch(maze, row, col - 1)
+          }
+          maze[row][col] = 'V'
       }
-      if (isSearchable(maze, row - 1, col)) {
-         return search(maze, row - 1, col)
-      }
-      if (isSearchable(maze, row, col + 1)) {
-          return search(maze, row, col + 1)
-      }
-      if (isSearchable(maze, row, col - 1)) {
-         return search(maze, row, col - 1)
-      }
+      depthFirstSearch(maze, row, col)
+      return finalMaze
   }
-
 
   function main() {
 
@@ -491,7 +460,7 @@ And
       let [startX, startY] = startPosition
       console.log('Start position:', startPosition)
 
-      let path = search(maze, startX, startY)
+      let path = solve(maze, startX, startY)
       console.log('I have found a solution!')
       // console.log(path)
       printMaze(path)
