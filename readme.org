@@ -476,6 +476,42 @@ And
 
   main()
 #+END_SRC
+* Memoize
+#+BEGIN_SRC javascript :tangle memoize.js
+  // TODO:implement a fibonacci function
+  // TODO: create a memoizer-function
+  // TODO: memoize fibonacci
+  const util = require('util')
+
+  let memory = {}
+
+  function fibonacci(x) {
+      if (1 === x || 2 === x) {
+         return 1
+      }
+      return fibonacci(x - 1) + fibonacci(x - 2)
+  }
+
+  function memoize(func) {
+      return function (x) {
+          if (!memory[x]) {
+              memory[x] = func(x)
+          }
+          return memory[x]
+      }
+  }
+
+  function main() {
+      let x = 40
+      let fast_fibonacci = memoize(fibonacci)
+      let answer = fast_fibonacci(x)
+      console.log(`f(${x}) = ${answer}`)
+      console.log(`Double checking: ${fast_fibonacci(x)}`)
+  }
+
+  main()
+
+#+END_SRC
 * File variables                                                   :noexport:
 # Local Variables:
 # eval: (add-hook 'after-save-hook 'org-babel-tangle t t)
